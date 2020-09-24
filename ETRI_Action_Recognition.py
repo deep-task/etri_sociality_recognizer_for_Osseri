@@ -6,9 +6,20 @@ import torch
 import torch.nn.functional as F
 import math
 import copy
+import json
+
+import PIL.Image
+
+import torchvision
+from torchvision import transforms
+from torch.autograd import Variable
 
 import torch2trt
 from torch2trt import TRTModule
+
+import trt_pose.coco
+import trt_pose.models
+from trt_pose.parse_objects import ParseObjects
 
 from scipy.spatial.distance import euclidean
 
