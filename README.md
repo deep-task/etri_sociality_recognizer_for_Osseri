@@ -20,17 +20,17 @@ Installation instructions are availale at: [Getting Started With Jetson Xavier N
 Installation instructions are availale at: [Pytorch for JetPack 4.4](https://forums.developer.nvidia.com/t/pytorch-for-jetson-nano-version-1-6-0-now-available/72048)
 ```
 ### pytorch 
-$ wget https://nvidia.box.com/shared/static/ncgzus5o23uck9i5oth2n8n06k340l6k.whl -O torch-1.4.0-cp36-cp36m-linux_aarch64.whl
+$ wget https://nvidia.box.com/shared/static/9eptse6jyly1ggt9axbja2yrmj6pbarc.whl -O torch-1.6.0-cp36-cp36m-linux_aarch64.whl
 $ sudo apt-get install python3-pip libopenblas-base libopenmpi-dev 
 $ pip3 install Cython
-$ pip3 install numpy torch-1.4.0-cp36-cp36m-linux_aarch64.whl
+$ pip3 install numpy torch-1.6.0-cp36-cp36m-linux_aarch64.whl
 
 ### torch vision
 $ sudo apt-get install libjpeg-dev zlib1g-dev
-$ git clone --branch <version> https://github.com/pytorch/vision torchvision   # see below for version of torchvision to download
+$ git clone --branch v0.7.0 https://github.com/pytorch/vision torchvision   # see below for version of torchvision to download
 $ cd torchvision
-$ export BUILD_VERSION=0.x.0  # where 0.x.0 is the torchvision version  
-$ sudo python setup.py install     # use python3 if installing for Python 3.6
+$ export BUILD_VERSION=0.7.0  # where 0.x.0 is the torchvision version  
+$ sudo python3 setup.py install     # use python3 if installing for Python 3.6
 $ cd ../  # attempting to load torchvision from build dir will result in import error
 $ pip install 'pillow<7' # always needed for Python 2.7, not needed torchvision v0.5.0+ with Python 3.6
 ```
