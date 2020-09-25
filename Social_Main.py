@@ -11,7 +11,7 @@ import socket
 import json
 
 
-
+DEBUG=False
 
 
 # socket Interface 초기화
@@ -105,7 +105,8 @@ def main():
 
         # main process start
         frame = cv2.flip(frame, 1)
-        img_show = copy.deepcopy(frame)
+        if DEBUG is True:
+            img_show = copy.deepcopy(frame)
 
         # Action Recognition
         #######################
@@ -159,9 +160,9 @@ def main():
             jsonString = get_recog_result_json(list_ETRIFace, nBiggestIndex, nSocialActionCode)
             client_socket.send(jsonString.encode())
 
-
-        cv2.imshow("TT", img_show)
-        nKey = cv2.waitKey(1)
+        if DEBUG is True:
+            cv2.imshow("TT", img_show)
+            nKey = cv2.waitKey(1)
 
         ##########################################################################
         # # 인식 결과 출력
