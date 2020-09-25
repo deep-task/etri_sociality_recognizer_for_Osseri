@@ -63,7 +63,7 @@ def get_recog_result_json(list_ETRIFace, nBiggestIndex, nSocialActionCode):
 
 def main():
     # HOST = "129.254.90.89"
-    HOST = "192.168.0.2"
+    HOST = "127.0.0.1"
     PORT = 9999
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
