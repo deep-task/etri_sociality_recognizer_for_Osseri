@@ -50,7 +50,7 @@ def get_recog_result_json(list_ETRIFace, nBiggestIndex, nSocialActionCode):
                 },
                 "glasses": False,
                 "social_action": nSocialActionCode,
-                "gaze": nInterested,
+                "gaze": -1,
                 "name": "",
                 "longterm_tendency": -1,
                 "lognterm_habit": -1
