@@ -37,6 +37,24 @@ fActionProb = []
 nNumJoint = 9
 nNumAction = 15
 
+class ETRIFace:
+    def __init__(self):
+        # class init
+        self.rt = [-1, -1, -1, -1]
+        self.fAge = -1.
+        self.fGender = -1.
+        self.fGlasses = -1.
+        self.sID = ""
+        self.fvScore = -1.
+        self.ptLE = [-1, -1]
+        self.ptRE = [-1, -1]
+        self.ptLM = [-1, -1]
+        self.ptRM = [-1, -1]
+        self.ptN = [-1, -1]
+
+        self.fYaw = -1.
+        self.fPitch = -1.
+        self.fRoll = -1.
 
 
 def ETRI_Initialization(path):
