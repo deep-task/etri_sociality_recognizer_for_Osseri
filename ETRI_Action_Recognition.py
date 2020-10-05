@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import torch
 import torch.nn.functional as F
+from torchvision import transforms
+from PIL import Image
 import math
 import copy
 import json
@@ -77,7 +79,7 @@ def ETRI_Initialization(path):
 
     print("hand action start")
     model_trt_ha = TRTModule()
-    model_path = os.path.join(path, 'handaction_TRT.pth')
+    model_path = os.path.join(path, 'handaction_jc_TRT.pth')
     model_trt_ha.load_state_dict(torch.load(model_path))
    
     return topology, parse_objects, model_skeleton, model_trt_ba, model_trt_ha
@@ -249,8 +251,16 @@ def convertToActionArr():
 
     for ff in range(nViewFrame):
         for jj in range(nNumJoint):
-            mTransformed[jj][ff][0] = 255 * (vAllX[ff * nNumJoint + jj] - tX[0]) / (tX[len(tX) - 1] - tX[0])
-            mTransformed[jj][ff][1] = 255 * (vAllY[ff * nNumJoint + jj] - tY[0]) / (tY[len(tY) - 1] - tY[0])
+            dX = (tX[len(tX) - 1] - tX[0])
+            dY = (tY[len(tY) - 1] - tY[0])
+            if dX == 0:
+                dX = 0.0000000000001
+            if dY == 0:
+                dY = 0.0000000000001
+
+            mTransformed[jj][ff][0] = min(255 * max(vAllX[ff * nNumJoint + jj] - tX[0], 0) / dX, 255)
+            mTransformed[jj][ff][1] = min(255 * max(vAllY[ff * nNumJoint + jj] - tY[0], 0) / dY, 255)
+
 
     mTransformed = cv2.resize(mTransformed, (64, 64))
     return mTransformed
@@ -267,7 +277,7 @@ def EAR_BodyAction_Estimation(BA_Net, convertedImg):
     fShoulder = math.fabs(vAllX[nNumJoint * (nViewFrame - 1) + 5] - vAllX[nNumJoint * (nViewFrame - 1) + 2])
     fNeck = math.fabs(vAllY[nNumJoint*(nViewFrame-1) + 0] - vAllY[nNumJoint*(nViewFrame-1) + 1])
     if fNeck < fShoulder/6 or vAllY[nNumJoint*(nViewFrame-1) + 0] > vAllY[nNumJoint*(nViewFrame-1) + 1]:
-        return 1
+        return 15
 
     convertedImg = cv2.cvtColor(convertedImg, cv2.COLOR_BGR2RGB)
     img_trim_in = convertedImg / 255
@@ -288,27 +298,26 @@ def updateAction(nAction):
         fActionArr[ii] = fActionArr[ii-1]
     fActionArr[0] = nAction
 
-ActionArr = ["bitenail", "covermouth", "fighting", "fingerheart", "fingerok", "shakehand", "thumbchuck", "touchnose"]
-sAction = ["foldarms", "handaction","neutral", "pickear", "restchin", "scratch", "waving"]
+sAction = ["foldarms", "handaction","neutral", "pickear", "restchin", "scratch", "waving", "fighting", "thumbchuck", "bitenail", "shakehand", "fingerok", "fingerheart", "covermouth", "touchnose", "bowing"]
 def getTopNAction(nTopN, convertedImg):
     global fActionProb, fActionArr, nCheckFrame, nNumAction, sAction
 
     if nTopN > nNumAction:
         return "nTopN is out of scope."
 
-    fActionProb = [0 for _ in range(nNumAction)]
-    fTemp = [0 for _ in range(nNumAction)]
+    fActionProb = [0 for _ in range(nNumAction+1)]
+    fTemp = [0 for _ in range(nNumAction+1)]
 
     for ii in range(nCheckFrame):
         fActionProb[fActionArr[ii]] = fActionProb[fActionArr[ii]] + 1
     fSum = 0.
 
-    for ii in range(nNumAction):
+    for ii in range(nNumAction+1):
         fExp = math.exp(fActionProb[ii])
         fSum = fSum + fExp
         fTemp[ii] = fExp
 
-    for ii in range(nNumAction):
+    for ii in range(nNumAction+1):
         fActionProb[ii] = (fTemp[ii] / fSum, ii)
 
     fActionProb.sort(reverse=True)
@@ -323,22 +332,26 @@ def getTopNAction(nTopN, convertedImg):
     return sTopN
 
 
+def getKeypointDistance(kp1, kp2):
+    return math.sqrt(pow(kp1[0] - kp2[0], 2) + pow(kp1[1]-kp2[1], 2))
+    
 
 def getHandPatch(img, vInputJointX, vInputJointY):
-    try:
+        try:
         if len(vInputJointX) != 0 and len(vInputJointY) != 0:
             nBorderMargin = int(img.shape[1] / 2)
             handPatchImg = np.zeros((128, 128, 3), np.uint8)
             borderImg = cv2.copyMakeBorder(img, nBorderMargin, nBorderMargin, nBorderMargin, nBorderMargin,
                                            cv2.BORDER_CONSTANT, 0)
-            borderImg = cv2.cvtColor(borderImg, cv2.COLOR_RGB2GRAY)
+            # borderImg = cv2.cvtColor(borderImg, cv2.COLOR_RGB2GRAY)
 
             # print("lenX : %d / lenY : %d" % (len(vInputJointX), len(vInputJointY)))
-            kp_distance = abs(vInputJointX[9] - vInputJointX[10])
-            if kp_distance < 10:
+            # kp_distance = abs(vInputJointX[9] - vInputJointX[10])
+            kp_distance = getKeypointDistance((vInputJointX[9], vInputJointY[9]), (vInputJointX[10], vInputJointY[10]))
+            if kp_distance < 20:
                 return 0, 0, 1
             
-            width_half = int((kp_distance) * 1.6)
+            width_half = int((kp_distance) * 2.0)
 
             # print("cp1")
 
@@ -347,6 +360,8 @@ def getHandPatch(img, vInputJointX, vInputJointY):
             R_Wrist = (vInputJointX[7], vInputJointY[7])
             R_Elbow = (vInputJointX[6], vInputJointY[6])
 
+            LhandPatchImg = RhandPatchImg = np.zeros((224, 224, 3), np.uint8)
+
             # print("cp2")
 
             nImageCenter = nBorderMargin
@@ -354,31 +369,39 @@ def getHandPatch(img, vInputJointX, vInputJointY):
             if L_Wrist[0] and L_Elbow[0]:
                 LH_Center_X = L_Wrist[0] + (-0.5 * (L_Elbow[0] - L_Wrist[0])) + nImageCenter
                 LH_Center_Y = L_Wrist[1] + (-0.5 * (L_Elbow[1] - L_Wrist[1])) + nImageCenter
-                LH_Patch = cv2.resize(
-                    borderImg[int(LH_Center_Y-width_half):int(LH_Center_Y+width_half), int(LH_Center_X-width_half):int(LH_Center_X+width_half)],
-                    (128, 128))
-                handPatchImg[:,:,0] = copy.copy(LH_Patch)
+
+                xmin = LH_Center_X - width_half
+                xmax = LH_Center_X + width_half
+                ymin = LH_Center_Y - width_half
+                ymax = LH_Center_Y + width_half
+
+                LH_Patch = cv2.resize(borderImg[int(ymin):int(ymax), int(xmin):int(xmax)], (224, 224))
+
+                LhandPatchImg = copy.deepcopy(LH_Patch)
+                LhandPatchImg = cv2.flip(LhandPatchImg, 1)
 
                 # print("cp3")
 
             if R_Wrist[0] and R_Elbow[0]:
                 RH_Center_X = R_Wrist[0] + (-0.5 * (R_Elbow[0] - R_Wrist[0])) + nImageCenter
                 RH_Center_Y = R_Wrist[1] + (-0.5 * (R_Elbow[1] - R_Wrist[1])) + nImageCenter
-                RH_Patch = cv2.resize(
-                    borderImg[int(RH_Center_Y-width_half):int(RH_Center_Y+width_half), int(RH_Center_X-width_half):int(RH_Center_X+width_half)],
-                    (128, 128))
-                handPatchImg[:,:,1] = copy.copy(RH_Patch)
+
+                xmin = RH_Center_X - width_half
+                xmax = RH_Center_X + width_half
+                ymin = RH_Center_Y - width_half
+                ymax = RH_Center_Y + width_half
+
+                RH_Patch = cv2.resize(borderImg[int(ymin):int(ymax), int(xmin):int(xmax)], (224, 224))
+
+                RhandPatchImg = copy.deepcopy(RH_Patch)
 
                 # print("cp4")
 
-            handPatchFlipImg = copy.deepcopy(handPatchImg)
-            handPatchFlipImg = cv2.flip(handPatchFlipImg, 1)
-            l, r, z = handPatchFlipImg[:, :, 0], handPatchFlipImg[:, :, 1], handPatchFlipImg[:, :, 2]
-            handPatchFlipImg = cv2.merge((r, l, z))
+
 
             # print("cp5")
 
-            return handPatchImg, handPatchFlipImg, 0
+            return LhandPatchImg, RhandPatchImg, 0
         else:
             return 0, 0, 1
 
@@ -400,26 +423,28 @@ def list2SoftList(srcList):
 
     return srcList
 
-def getHandActionStr(HA_Net, handPatchImg):
+transformations_HandAction = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])]
+)
+
+
+def getHandActionIdx(HA_Net, handPatchImg):
     global fActionArr
 
-    hand_patch = cv2.cvtColor(handPatchImg, cv2.COLOR_BGR2RGB)
+    handPatchImg = cv2.cvtColor(handPatchImg, cv2.COLOR_BGR2RGB)
+    PILImg = Image.fromarray(handPatchImg)
+    img = transformations_HandAction(PILImg)
+    img = img.contiguous()
+    img = img.cuda()
+    img = img.unsqueeze(0)
 
-    convertedImg = cv2.cvtColor(hand_patch, cv2.COLOR_BGR2RGB)
-    img_trim_in = convertedImg / 255
-    img_trim_in = img_trim_in[np.newaxis, :, :, :]
-    img_trim_in = np.transpose(img_trim_in,(0,3,1,2)).astype(np.float32)
-    torch_input = torch.from_numpy(img_trim_in)
-    torch_input = torch_input.cuda()
-    torch_input = torch_input.contiguous()
-    _, output = HA_Net(torch_input)
-    
+    output = HA_Net(img)
+
     output_cpu = output.cpu().detach().numpy().squeeze()
-    output_cpu = list2SoftList(output_cpu)
-    max_idx = np.argmax(output_cpu)
-    result = ActionArr[max_idx]
+    max_idx = output_cpu.argmax()
 
-    return result
+    return max_idx + 7
 
 
 def getSocialActionIndex(sActionResult):

@@ -126,19 +126,22 @@ def main():
             if len(EAR.vAllX) == EAR.nViewFrame * EAR.nNumJoint:
                 # get converted feature map
                 convertedImg = EAR.convertToActionArr()
-                nTempAction = EAR.EAR_BodyAction_Estimation(BodyAction_Net, convertedImg)
-                EAR.updateAction(nTempAction)
-                sActionResult = EAR.getTopNAction(1, convertedImg)
+                
+                # 20.10.05. update. change hand action model
+                nBodyAction = EAR.EAR_BodyAction_Estimation(BodyAction_Net, convertedImg)
 
-                #### edit from here. return format / index / result string etc...
-                if sActionResult.split(" ")[0] == "handaction":
-                    hand_patch, _, checkVal = EAR.getHandPatch(frame, vInputJointX, vInputJointY)
+                if nBodyAction == 1:
+                    Lhand_patch, Rhand_patch, checkVal = EAR.getHandPatch(frame, vInputJointX, vInputJointY)
 
                     if checkVal == 0:
-                        sActionResult = EAR.getHandActionStr(HandAction_Net, hand_patch)
-
+                        cv2.imshow("TaaaT", Rhand_patch)
+                        nHandAction = EAR.getHandActionIdx(HandAction_Net, Rhand_patch)
+                        EAR.updateAction(nHandAction)
                 else:
-                    EAR.updateAction(nTempAction)
+                    EAR.updateAction(nBodyAction)
+
+                sActionResult = EAR.getTopNAction(1)
+                
                 print(sActionResult)
                 nSocialActionCode = EAR.getSocialActionIndex(sActionResult)
 
