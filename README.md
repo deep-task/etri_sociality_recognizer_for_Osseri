@@ -96,7 +96,7 @@ $ git clone https://github.com/deep-task/etri_sociality_recognizer_for_Osseri.gi
 ```
 
 #### Download model files.
-* Download all the model files (.pth) from [here]().
+* Download all the model files (.pth) from [here](https://drive.google.com/drive/folders/1DFsZrhRUeJ28NBjxhssjy0YggHSJZiNy?usp=sharing).
 * Move the model files to a folder  `socialactionrecog/models`.
 
 
