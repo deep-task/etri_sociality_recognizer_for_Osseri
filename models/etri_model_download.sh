@@ -12,8 +12,8 @@ then
 else
     cd $ETRI_RECOG_PATH'/models'
     rm *
-    FILEID='1rsiaiCyjJaW7vz3532iI4MxLWC2hhedY'
-    FILENAME='etri_models.tar.gz'
+    FILEID='1DFsZrhRUeJ28NBjxhssjy0YggHSJZiNy'
+    FILENAME='ETRI_Osseri_Model.tar.xz'
     curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id="$FILEID > /dev/null
     curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ./cookie`&id="$FILEID -o $FILENAME
     rm cookie
