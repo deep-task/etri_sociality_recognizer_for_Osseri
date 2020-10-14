@@ -299,7 +299,7 @@ def updateAction(nAction):
     fActionArr[0] = nAction
 
 sAction = ["foldarms", "handaction","neutral", "pickear", "restchin", "scratch", "waving", "fighting", "thumbchuck", "bitenail", "shakehand", "fingerok", "fingerheart", "covermouth", "touchnose", "bowing"]
-def getTopNAction(nTopN, convertedImg):
+def getTopNAction(nTopN):
     global fActionProb, fActionArr, nCheckFrame, nNumAction, sAction
 
     if nTopN > nNumAction:
@@ -337,7 +337,7 @@ def getKeypointDistance(kp1, kp2):
     
 
 def getHandPatch(img, vInputJointX, vInputJointY):
-        try:
+    try:
         if len(vInputJointX) != 0 and len(vInputJointY) != 0:
             nBorderMargin = int(img.shape[1] / 2)
             handPatchImg = np.zeros((128, 128, 3), np.uint8)

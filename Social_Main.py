@@ -134,7 +134,7 @@ def main():
                     Lhand_patch, Rhand_patch, checkVal = EAR.getHandPatch(frame, vInputJointX, vInputJointY)
 
                     if checkVal == 0:
-                        cv2.imshow("TaaaT", Rhand_patch)
+                        # cv2.imshow("TaaaT", Rhand_patch)
                         nHandAction = EAR.getHandActionIdx(HandAction_Net, Rhand_patch)
                         EAR.updateAction(nHandAction)
                 else:
