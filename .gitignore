@@ -1,0 +1,15 @@
+.vscode/
+.idea/
+*.pyc
+*.dll
+*.model
+*.weight
+*.vscode
+*.npy
+*.caffemodel
+*.prototxt
+face/
+hand/
+pose/
+*.tar
+*.pth
