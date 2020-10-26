@@ -108,6 +108,7 @@ def main():
         if DEBUG is True:
             img_show = copy.deepcopy(frame)
 
+
         # Action Recognition
         #######################
         # Get Skeleton data

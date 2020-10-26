@@ -294,7 +294,22 @@ def EAR_BodyAction_Estimation(BA_Net, convertedImg):
     _, output = BA_Net(torch_input)
     output_np = output.cpu().detach().numpy().squeeze().tolist()
 
-    return output_np.index(max(output_np))
+    # 201026.
+    # return output_np.index(max(output_np))
+    nBodyActionIdx = output_np.index(max(output_np))
+    if nBodyActionIdx == 1:
+        M = math.fabs(vAllX[nNumJoint * (nViewFrame - 1) + 2] - vAllX[nNumJoint * (nViewFrame - 1) + 5]) * 0.2
+        L = vAllX[nNumJoint * (nViewFrame - 1) + 8]
+        R = vAllX[nNumJoint * (nViewFrame - 1) + 6] + M
+        T = (vAllY[nNumJoint * (nViewFrame - 1) + 1] + vAllY[nNumJoint * (nViewFrame - 1) + 8]) / 2 - M
+        B = vAllY[nNumJoint * (nViewFrame - 1) + 8]
+        X = vAllX[nNumJoint * (nViewFrame - 1) + 7]
+        Y = vAllY[nNumJoint * (nViewFrame - 1) + 7]
+        if L < X and X < R:
+            if T < Y and Y < B:
+                return 10
+
+    return nBodyActionIdx
 
 
 def updateAction(nAction):
