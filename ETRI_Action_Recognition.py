@@ -337,7 +337,7 @@ def getTopNAction(nTopN):
 
     # 201026.
     # return sTopN
-    if fActionProb[0][0] < 0.8:
+    if fActionProb[0][0] < 0.9:
         sTopN = "Switching behavior"
 
     return sTopN
