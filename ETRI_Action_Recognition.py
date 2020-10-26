@@ -43,7 +43,6 @@ fActionProb = []
 nNumJoint = 9
 nNumAction = 15
 
-nPrevAction = "neutral"
 
 class ETRIFace:
     def __init__(self):
@@ -338,10 +337,10 @@ def getTopNAction(nTopN):
 
     # 201026.
     # return sTopN
-    if fActionProb[0][0] > 0.8:
-        nPrevAction = sTopN
+    if fActionProb[0][0] < 0.8:
+        sTopN = "Switching behavior"
 
-    return nPrevAction
+    return sTopN
 
 
 def getKeypointDistance(kp1, kp2):
@@ -460,6 +459,9 @@ def getHandActionIdx(HA_Net, handPatchImg):
 
 
 def getSocialActionIndex(sActionResult):
+    if sActionResult == "Switching behavior":
+        return -1
+
     sSocialActionList = ["bitenail", "covermouth", "fighting", "fingerheart", "fingerok",
     "foldarms", "neutral", "pickear", "restchin", "scratch",
     "shakehand", "thumbchuck", "touchnose", "waving", "bowing"]
