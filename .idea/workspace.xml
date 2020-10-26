@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b619c07d-9a0d-41b2-bb21-9412172bb962" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/etri_sociality_recognizer_for_Osseri.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/etri_sociality_recognizer_for_Osseri.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ETRI_Action_Recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/ETRI_Action_Recognition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Social_Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Social_Main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +18,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Social_Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="142" column="45" lean-forward="true" selection-start-line="142" selection-start-column="45" selection-end-line="142" selection-end-column="45" />
+            <state relative-caret-position="2278">
+              <caret line="142" column="45" selection-start-line="142" selection-start-column="45" selection-end-line="142" selection-end-column="45" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -28,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ETRI_Action_Recognition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="301" column="23" selection-start-line="301" selection-start-column="23" selection-end-line="301" selection-end-column="23" />
+            <state relative-caret-position="-1020">
+              <caret line="175" column="47" lean-forward="true" selection-start-line="175" selection-start-column="47" selection-end-line="175" selection-end-column="47" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -61,16 +63,17 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1145" />
-    <option name="y" value="107" />
+    <option name="x" value="2362" />
+    <option name="y" value="295" />
     <option name="width" value="2450" />
-    <option name="height" value="1569" />
+    <option name="height" value="1570" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -82,12 +85,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -115,7 +118,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="916" y="86" width="1960" height="1255" extended-state="0" />
+    <frame x="1890" y="236" width="1960" height="1256" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -151,8 +154,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Social_Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="142" column="45" lean-forward="true" selection-start-line="142" selection-start-column="45" selection-end-line="142" selection-end-column="45" />
+        <state relative-caret-position="2278">
+          <caret line="142" column="45" selection-start-line="142" selection-start-column="45" selection-end-line="142" selection-end-column="45" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
@@ -161,8 +164,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ETRI_Action_Recognition.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="301" column="23" selection-start-line="301" selection-start-column="23" selection-end-line="301" selection-end-column="23" />
+        <state relative-caret-position="-1020">
+          <caret line="175" column="47" lean-forward="true" selection-start-line="175" selection-start-column="47" selection-end-line="175" selection-end-column="47" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

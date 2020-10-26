@@ -33,11 +33,17 @@ from scipy.spatial.distance import euclidean
 vAllX = []
 vAllY = []
 nViewFrame = 5
-nCheckFrame = nViewFrame * 3
+
+# 201026.
+# nCheckFrame = nViewFrame * 3
+nCheckFrame = nViewFrame * 4
+
 fActionArr = [0 for _ in range(nCheckFrame)]
 fActionProb = []
 nNumJoint = 9
 nNumAction = 15
+
+nPrevAction = "neutral"
 
 class ETRIFace:
     def __init__(self):
@@ -300,7 +306,8 @@ def updateAction(nAction):
 
 sAction = ["foldarms", "handaction","neutral", "pickear", "restchin", "scratch", "waving", "fighting", "thumbchuck", "bitenail", "shakehand", "fingerok", "fingerheart", "covermouth", "touchnose", "bowing"]
 def getTopNAction(nTopN):
-    global fActionProb, fActionArr, nCheckFrame, nNumAction, sAction
+    # global fActionProb, fActionArr, nCheckFrame, nNumAction, sAction
+    global fActionProb, fActionArr, nCheckFrame, nNumAction, sAction, nPrevAction
 
     if nTopN > nNumAction:
         return "nTopN is out of scope."
@@ -329,7 +336,12 @@ def getTopNAction(nTopN):
                                                          , fProb=fActionProb[ii][0]*100)
         sTopN  = sTopN + sActionNProb
 
-    return sTopN
+    # 201026.
+    # return sTopN
+    if fActionProb[0][0] > 0.8:
+        nPrevAction = sTopN
+
+    return nPrevAction
 
 
 def getKeypointDistance(kp1, kp2):
