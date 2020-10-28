@@ -301,7 +301,7 @@ def EAR_BodyAction_Estimation(BA_Net, convertedImg):
         M = math.fabs(vAllX[nNumJoint * (nViewFrame - 1) + 2] - vAllX[nNumJoint * (nViewFrame - 1) + 5]) * 0.2
         L = vAllX[nNumJoint * (nViewFrame - 1) + 8]
         R = vAllX[nNumJoint * (nViewFrame - 1) + 6] + M
-        T = (vAllY[nNumJoint * (nViewFrame - 1) + 1] + vAllY[nNumJoint * (nViewFrame - 1) + 8]) / 2 - M
+        T = (vAllY[nNumJoint * (nViewFrame - 1) + 1] + vAllY[nNumJoint * (nViewFrame - 1) + 8]) / 2 - (M * 2)
         B = vAllY[nNumJoint * (nViewFrame - 1) + 8]
         X = vAllX[nNumJoint * (nViewFrame - 1) + 7]
         Y = vAllY[nNumJoint * (nViewFrame - 1) + 7]
