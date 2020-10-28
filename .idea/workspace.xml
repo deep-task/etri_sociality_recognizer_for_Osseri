@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b619c07d-9a0d-41b2-bb21-9412172bb962" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ETRI_Action_Recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/ETRI_Action_Recognition.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Social_Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="110" selection-start-line="110" selection-end-line="110" />
+            <state relative-caret-position="1473">
+              <caret line="123" column="55" lean-forward="true" selection-start-line="123" selection-start-column="55" selection-end-line="123" selection-end-column="55" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -28,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ETRI_Action_Recognition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="276" column="40" lean-forward="true" selection-start-line="276" selection-start-column="40" selection-end-line="276" selection-end-column="40" />
+            <state relative-caret-position="442">
+              <caret line="86" column="52" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -61,8 +60,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2305" />
-    <option name="y" value="577" />
+    <option name="x" value="2507" />
+    <option name="y" value="720" />
     <option name="width" value="2450" />
     <option name="height" value="1410" />
   </component>
@@ -116,7 +115,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1844" y="462" width="1960" height="1128" extended-state="0" />
+    <frame x="2006" y="576" width="1960" height="1128" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -152,8 +151,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Social_Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="110" selection-start-line="110" selection-end-line="110" />
+        <state relative-caret-position="1473">
+          <caret line="123" column="55" lean-forward="true" selection-start-line="123" selection-start-column="55" selection-end-line="123" selection-end-column="55" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
@@ -162,8 +161,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ETRI_Action_Recognition.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="276" column="40" lean-forward="true" selection-start-line="276" selection-start-column="40" selection-end-line="276" selection-end-column="40" />
+        <state relative-caret-position="442">
+          <caret line="86" column="52" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="52" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

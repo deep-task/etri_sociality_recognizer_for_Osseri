@@ -84,7 +84,7 @@ def ETRI_Initialization(path):
 
     print("hand action start")
     model_trt_ha = TRTModule()
-    model_path = os.path.join(path, 'handaction_jc_TRT.pth')
+    model_path = os.path.join(path, 'handaction_jc_c_TRT.pth')
     model_trt_ha.load_state_dict(torch.load(model_path))
    
     return topology, parse_objects, model_skeleton, model_trt_ba, model_trt_ha
