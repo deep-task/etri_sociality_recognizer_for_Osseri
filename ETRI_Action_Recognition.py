@@ -63,6 +63,8 @@ class ETRIFace:
         self.fPitch = -1.
         self.fRoll = -1.
 
+        self.bInterest = False
+
 
 def ETRI_Initialization(path):
     # Load & Init for Skeletons
@@ -86,8 +88,13 @@ def ETRI_Initialization(path):
     model_trt_ha = TRTModule()
     model_path = os.path.join(path, 'handaction_jc_c_TRT.pth')
     model_trt_ha.load_state_dict(torch.load(model_path))
+
+    print("headpose start")
+    model_trt_hp = TRTModule()
+    model_path = os.path.join(path, 'headpose_TRT.pth')
+    model_trt_hp.load_state_dict(torch.load(model_path))
    
-    return topology, parse_objects, model_skeleton, model_trt_ba, model_trt_ha
+    return topology, parse_objects, model_skeleton, model_trt_ba, model_trt_ha, model_trt_hp
 
 
 def trtPose_preprocess(image):
@@ -615,3 +622,83 @@ def getTendencyCategory(fDistance):
 
 
 
+########################################################################
+########################################################################
+########################################################################
+
+# EFI function..
+
+transformations_hopenet = transforms.Compose(
+    [transforms.Scale(224),
+     transforms.CenterCrop(224), transforms.ToTensor(),
+     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])]
+)
+
+def ETRI_HeadPose_Estimation(HeadPose_Net, cvImg, list_ETRIFace, nIndex):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    oImg = cvImg[int(list_ETRIFace[nIndex].rt[1]):int(list_ETRIFace[nIndex].rt[3]), \
+          int(list_ETRIFace[nIndex].rt[0]):int(list_ETRIFace[nIndex].rt[2])].copy()
+    # print("cvImg Shape : ")
+    # print(cvImg.shape)
+    # print("oImg Shape : ")
+    # print(oImg.shape)
+
+    if oImg.shape[0] == 0 or oImg.shape[1] == 0:
+        return (-1, -1, -1)
+
+    idx_tensor = [idx for idx in range(66)]
+    idx_tensor = torch.FloatTensor(idx_tensor).to(device)
+
+    PILImg = Image.fromarray(oImg)
+
+    img = transformations_hopenet(PILImg)
+    img_shape = img.size()
+    img = img.view(1, img_shape[0], img_shape[1], img_shape[2])
+    img = Variable(img).to(device)
+    img = img.contiguous()
+
+    yaw, pitch, roll = HeadPose_Net(img)
+
+    yaw_predicted = F.softmax(yaw)
+    pitch_predicted = F.softmax(pitch)
+    roll_predicted = F.softmax(roll)
+
+    yaw_predicted = torch.sum(yaw_predicted.data[0] * idx_tensor) * 3 - 99
+    pitch_predicted = torch.sum(pitch_predicted.data[0] * idx_tensor) * 3 - 99
+    roll_predicted = torch.sum(roll_predicted.data[0] * idx_tensor) * 3 - 99
+
+    list_ETRIFace[nIndex].fYaw = yaw_predicted.item()
+    list_ETRIFace[nIndex].fPitch = pitch_predicted.item()
+    list_ETRIFace[nIndex].fRoll = roll_predicted.item()
+
+    return (yaw_predicted, pitch_predicted, roll_predicted)
+
+
+
+def ETRI_Get_Interested(HeadPose_Net, cvImg, list_ETRIFace, nIndex):
+    nMargin = 150
+
+    fYaw, _, _ = ETRI_HeadPose_Estimation(HeadPose_Net, cvImg, list_ETRIFace, nIndex)
+
+    if fYaw == -1:
+        return False
+
+    x_center = (list_ETRIFace[nIndex].rt[0] + list_ETRIFace[nIndex].rt[2])/2
+
+    fYaw = fYaw * math.pi / 180.0
+    p_offset = -1 * math.tan(fYaw) * 180
+
+    p_img = x_center + p_offset
+
+    # cv2.line(cvImg, (int(320 - nMargin), 0), (int(320 - nMargin), 480), (0, 0, 255), 1)
+    # cv2.line(cvImg, (int(320 + nMargin), 0), (int(320 + nMargin), 480), (0, 0, 255), 1)
+    # cv2.line(cvImg, (int(p_img),0), (int(p_img),480), (0,255,0), 2)
+    # cvDisplay = cv2.flip(cvImg, 1)
+    # cv2.imshow("II", cvDisplay)
+
+    if 320-nMargin < p_img < 320+nMargin:
+        list_ETRIFace[nIndex].bInterest = True
+        return True
+    else:
+        list_ETRIFace[nIndex].bInterest = False
+        return False

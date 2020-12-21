@@ -48,6 +48,7 @@ def get_recog_result_json(list_ETRIFace, nBiggestIndex, nSocialActionCode):
                     "pitch": list_ETRIFace[nBiggestIndex].fPitch,
                     "roll": list_ETRIFace[nBiggestIndex].fRoll
                 },
+                "interest": list_ETRIFace[nBiggestIndex].bInterest,
                 "glasses": False,
                 "social_action": nSocialActionCode,
                 "gaze": -1,
@@ -77,7 +78,7 @@ def main():
     bReady = True
 
     # 행동 정보 인식 모델 초기화
-    topology, parse_objects, Skeleton_Net, BodyAction_Net, HandAction_Net = EAR.ETRI_Initialization("./models/")
+    topology, parse_objects, Skeleton_Net, BodyAction_Net, HandAction_Net, Headpose_Net = EAR.ETRI_Initialization("./models/")
 
     # 개인 정보 관리를 위해 기존 데이터 존재여부 확인
     nFrameCNT = 1
@@ -147,6 +148,8 @@ def main():
                 nSocialActionCode = EAR.getSocialActionIndex(sActionResult)
 
 
+            # check interested
+            bInterested = EAR.ETRI_Get_Interested(Headpose_Net, frame, list_ETRIFace, nBiggestIndex)
 
             # update는 20frame 마다 실행 (20FPS 기준. 약 1초간격으로 업데이트)
             if nFrameCNT % 20 == 0:
