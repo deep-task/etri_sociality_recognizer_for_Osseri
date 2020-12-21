@@ -48,10 +48,9 @@ def get_recog_result_json(list_ETRIFace, nBiggestIndex, nSocialActionCode):
                     "pitch": list_ETRIFace[nBiggestIndex].fPitch,
                     "roll": list_ETRIFace[nBiggestIndex].fRoll
                 },
-                "interest": list_ETRIFace[nBiggestIndex].bInterest,
                 "glasses": False,
                 "social_action": nSocialActionCode,
-                "gaze": -1,
+                "gaze": list_ETRIFace[nBiggestIndex].bInterest, #  0: aversion, 1: contact
                 "name": "",
                 "longterm_tendency": -1,
                 "lognterm_habit": -1
